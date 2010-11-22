@@ -68,11 +68,21 @@ Text Mode
     + - volume up
     - - volume down
     0 - toggle mute
+    up/down/page up/page down/home/end - move between items
+    Esc - quit
 
     Playlist panel
     d - delete track from playlist
+    shift up - move track up the playlist
+    shift down - move track down the playlist
 
     Artist / Albums / Songs panels
     a-z - move to items starting with that letter
     # - move to items starting with a number or special character
     / - enter leave search mode
+
+    Tracks panel
+    Return - add track to playlist
+
+    Albums panel
+    Return - add whole album
