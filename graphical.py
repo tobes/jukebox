@@ -11,7 +11,7 @@ app_path = os.path.dirname(os.path.abspath(__file__))
 
 from schema import Song, Album, Artist, History, Session
 
-class jukebox:
+class Jukebox:
 
 
     dragSongID = 0
@@ -1159,7 +1159,7 @@ class jukebox:
 
 def start():
     gobject.threads_init()
-    app = jukebox()
+    app = Jukebox()
     gtk.main()
 
 if __name__ == "__main__":
