@@ -27,7 +27,7 @@ def utf(arg):
 
 
 
-def find_songs(path, quick = True):
+def find_songs(path, quick = False):
     """search path for music files and add to database"""
 
     num_dirs = 0
@@ -45,7 +45,7 @@ def find_songs(path, quick = True):
         album = utf(album)
         artist = utf(artist)
         path = utf(root)
-        dir_data = dict(path = path, artist = artist, album = album, songs = [])
+        dir_data = dict(path = path, artist = artist, album = album, songs = [], pattern = None)
         for file in files:
             file_path = os.path.join(root, file)
             (mimetype, junk) = mimetypes.guess_type(file_path, True)
