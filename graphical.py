@@ -28,6 +28,12 @@ class jukebox:
     limit_songs_mode = True
     limit_songs_number = 3
     
+
+    currentOffset = 0
+    currentWhere = ""
+    currentFunction = ""
+
+
     currentAlbumID = 0
 
     def format_time(self, time):
@@ -111,7 +117,7 @@ class jukebox:
                     self.pane_timer = self.pane_timer + 1
                     if self.pane_timer >= 10:
                         self.panesize = self.pane2.get_position()
-                        self.actionFillAlbums(currentWhere, currentOffset - 16)
+                        self.actionFillAlbums(self.currentWhere, self.currentOffset - 16)
                 else:
                     self.panesize_temp = self.pane2.get_position()
                     self.pane_timer = 0
@@ -476,12 +482,11 @@ class jukebox:
 
     def actionButton(self, info):
 
-        global currentOffset
-        if currentFunction == "actionFillAlbums":
+        if self.currentFunction == "actionFillAlbums":
             if info == "prev" or info == "next":
                 if info == "prev":
-                    currentOffset = currentOffset - 32
-                self.actionFillAlbums(currentWhere, currentOffset)
+                    self.currentOffset = self.currentOffset - 32
+                self.actionFillAlbums(self.currentWhere, self.currentOffset)
             else:
                 if info == "show_tracks":
                     (x,y) = self.pane2.size_request()
@@ -490,11 +495,11 @@ class jukebox:
                 if info == "show_albums":
                     self.pane2.set_position(0)
                     self.pane2.resize_children() 
-                    self.actionFillAlbums(currentWhere, currentOffset - 16)
+                    self.actionFillAlbums(self.currentWhere, self.currentOffset - 16)
                 if info == "show_both":
                     self.pane2.set_position(200)
                     self.pane2.resize_children()
-                    self.actionFillAlbums(currentWhere, currentOffset - 16)
+                    self.actionFillAlbums(self.currentWhere, self.currentOffset - 16)
 
             
 
@@ -674,16 +679,14 @@ class jukebox:
         # get the album info
         data = self.database.get_albums_with_artist(offset = offset, limit = table_size)
 
-        global currentOffset
-        global currentFunction
         if offset + table_size <= totalAlbums:
-            currentOffset = offset + table_size
-        currentFunction = "actionFillAlbums"
+            self.currentOffset = offset + table_size
+        self.currentFunction = "actionFillAlbums"
         # have we wrapped round the end of the albums?
         needed = table_size - len(data)
         if needed:
             data.extend(self.database.get_albums_with_artist(offset = 0, limit = needed))
-            currentOffset = needed
+            self.currentOffset = needed
 
         self.albumTable.destroy()
         self.albumTable = gtk.Table(table_width, table_height)
@@ -1169,12 +1172,6 @@ class jukebox:
 
 def start():
     gobject.threads_init()
-    statusPlaying = 0
-    statusPlayListLen = 0
-    currentFile = ""
-    currentOffset = 0
-    currentWhere = ""
-    currentFunction = ""
     app = jukebox()
     gtk.main()
 
