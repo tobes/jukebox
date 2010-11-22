@@ -38,6 +38,7 @@ def find_songs(path, quick = False):
     out = ''
     for root, dirs, files in os.walk(path):
         if not files:
+            processed_dirs += 1
             continue
         (head, album) = os.path.split(root)
         (head, artist) = os.path.split(head)
@@ -68,10 +69,18 @@ def find_songs(path, quick = False):
 
         processed_dirs += 1
         sys.stdout.write(chr(8) * len(out))
-        out = '%s of %s' % (processed_dirs, num_dirs)
+        out = 'Processing %s of %s directories %s%%' % (processed_dirs, num_dirs, make_percent(processed_dirs, num_dirs))
         sys.stdout.write(out)
         sys.stdout.flush()
 
+    sys.stdout.write(chr(8) * len(out))
+    sys.stdout.write('Completed%s\n' % (' ' * (len(out) - 9)))
+    sys.stdout.flush()
+
+def make_percent(count, total):
+    if not count:
+        return 100
+    return int(100 * count/total)
 
 
 artist_cache = {}
@@ -271,7 +280,6 @@ def analyse_songs(dir_data):
 
 
 
-print '~' * 20
 
 def check_albums():
 
