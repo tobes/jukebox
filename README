@@ -14,13 +14,13 @@ This is my personal jukebox program
 The aim of this project is to simply manage a music library
 that is arranged into directories that fit the general pattern
 of ARTIST_NAME/ALBUM_NAME/album_files. The album files should
-be of some variation of "TRACK_NUMBER TITLE.ext' . If a image
+be of some variation of "TRACK_NUMBER TITLE.ext' . If an image
 file is found in the directory it will be used as album art.
 For albums with various artists they are expected to be in
 Various/ALBUM_NAME/album_files where the tracks are named
 'TRACK_NUMBER ARTIST_NAME TITLE.ext'.
 
-The jukebox can run in both a graphicl or text based mode.
+The jukebox can run in both a graphical or text based mode.
 The graphical mode version also contains a 'child lock' mode
 which needs to be documented. It picks random songs if the
 playlist is empty.
