@@ -676,6 +676,10 @@ class Interface(object):
         search = search_box.edit()
 
     def key_event(self, key):
+        # ESC
+        if key == 27:
+            self.player.stop_threads()
+            sys.exit()
         # TAB
         if key == 9:
             self.current_tab += 1
