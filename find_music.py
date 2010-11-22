@@ -163,8 +163,8 @@ def add_songs(dir_data, quick):
     if quick and new_album:
         return
 
-    analyse_songs(dir_data)
-
+    if not analyse_songs(dir_data):
+        return
     # album art
     if 'art' in dir_data:
         img_path = dir_data['art']
