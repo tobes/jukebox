@@ -18,7 +18,7 @@ if __name__ == "__main__":
                       help="start the jukebox in text mode")
 
     parser.add_option("-f", "--find",
-                      action="store", dest="file", default = None,
+                      action="store", dest="directory", default = None,
                       help="find music in the directory and it's children")
 
     (options, args) = parser.parse_args()
@@ -27,9 +27,9 @@ if __name__ == "__main__":
         import clear_database
         clear_database.clear_database()
 
-    if options.file:
+    if options.directory:
         import find_music
-        find_music.find_songs(options.file)
+        find_music.find_songs(options.directory)
 
     if options.text:
         import text
