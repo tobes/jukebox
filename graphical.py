@@ -5,8 +5,8 @@ pygtk.require('2.0')
 import gtk, pango, string, random, gobject
 import player, re
 
-version="0.3.6 alpha"
-app_path="/home/toby/git/jukebox/"
+version = "0.3.6 alpha"
+app_path = os.path.dirname(os.path.abspath(__file__))
 
 
 from schema import Song, Album, Artist, History, Session
@@ -403,11 +403,11 @@ class jukebox:
             sub_img_border = 2
             if albArt:
                 try:
-                    buffer1 = gtk.gdk.pixbuf_new_from_file("%sart/%s.jpeg" % (app_path, AlbID) ).scale_simple(int(imgSize), int(imgSize), gtk.gdk.INTERP_BILINEAR)
+                    buffer1 = gtk.gdk.pixbuf_new_from_file(os.path.join(app_path, 'art', '%s.jpeg' % AlbID)).scale_simple(int(imgSize), int(imgSize), gtk.gdk.INTERP_BILINEAR)
                 except:
-                    buffer1 = gtk.gdk.pixbuf_new_from_file("%sart/0.jpg" % app_path ).scale_simple(int(imgSize), int(imgSize), gtk.gdk.INTERP_BILINEAR)
+                    buffer1 = gtk.gdk.pixbuf_new_from_file(os.path.join(app_path, 'art', '0.jpg')).scale_simple(int(imgSize), int(imgSize), gtk.gdk.INTERP_BILINEAR)
             else:
-                buffer1 = gtk.gdk.pixbuf_new_from_file("%sart/0.jpg" % app_path ).scale_simple(int(imgSize), int(imgSize), gtk.gdk.INTERP_BILINEAR)
+                buffer1 = gtk.gdk.pixbuf_new_from_file(os.path.join(app_path, 'art', '0.jpg')).scale_simple(int(imgSize), int(imgSize), gtk.gdk.INTERP_BILINEAR)
                 
                 # WORKING OVERLAY
 #            buffer1 = buffer1.add_alpha(False, chr(255), chr(255), chr(255))
