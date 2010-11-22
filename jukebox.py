@@ -1,5 +1,7 @@
+import sys
 from optparse import OptionParser
 
+__version__ = '0.3.6 alpha'
 
 if __name__ == "__main__":
     usage = "usage: %prog [options] package"
@@ -21,7 +23,14 @@ if __name__ == "__main__":
                       action="store", dest="directory", default = None,
                       help="find music in the directory and it's children")
 
+    parser.add_option("-v", "--version",
+                      action="store_true", dest="version",
+                      help="show version")
     (options, args) = parser.parse_args()
+
+    if options.version:
+        print __version__
+        sys.exit()
 
     if options.clear:
         import clear_database

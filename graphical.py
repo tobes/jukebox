@@ -5,11 +5,10 @@ pygtk.require('2.0')
 import gtk, pango, string, random, gobject
 import player, re
 
-version = "0.3.6 alpha"
 app_path = os.path.dirname(os.path.abspath(__file__))
 
-
 from schema import Song, Album, Artist, History, Session
+import jukebox
 
 class Jukebox:
 
@@ -873,7 +872,7 @@ class Jukebox:
         dialog = gtk.Dialog()
         ok_button = dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
         ok_button.set_alignment(0,0)
-        label = gtk.Label("<big><b>Jukebox " + version + "</b></big>")
+        label = gtk.Label("<big><b>Jukebox " + jukebox.__version__ + "</b></big>")
         label.set_use_markup(True)
         dialog.vbox.pack_start(label)
         label = gtk.Label("\nWritten by Toby Dacre\n\n\nHAPPY BIRTHDAY ANA :)\n\n")
@@ -920,7 +919,7 @@ class Jukebox:
     #    gtk.rc_parse("/home/toby/scripts/dark.rc")
             # create a new window
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        self.window.set_title("JukeBox "+ version)
+        self.window.set_title("JukeBox "+ jukebox.__version__)
         self.window.set_border_width(10)
         self.window.set_position(gtk.WIN_POS_CENTER)
         self.window.connect("delete_event", self.delete_event)
