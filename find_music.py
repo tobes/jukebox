@@ -167,10 +167,10 @@ def add_songs(dir_data, quick):
 
     # album art
     if 'art' in dir_data:
-        path = dir_data['art']
+        img_path = dir_data['art']
         # make thumbnail
         try:
-            image = Image.open(path)
+            image = Image.open(img_path)
             image.thumbnail((300,300), Image.ANTIALIAS)
             image.save(os.path.join("art/", '%s.jpeg' % album_id), "JPEG")
             data = session.query(Album).filter_by(id = album_id).one()
