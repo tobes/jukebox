@@ -759,9 +759,11 @@ def init(stdscr):
     interface = Interface(stdscr)
     interface.main()
 
+def start():
+    curses.wrapper(init)
 
-curses.wrapper(init)
-
+if __name__ == '__main__':
+    start()
 
 
 
