@@ -25,6 +25,27 @@ The graphical mode version also contains a 'child lock' mode
 which needs to be documented. It picks random songs if the
 playlist is empty.
 
+Required Python Modules
+-----------------------
+
+    sqlalchemy
+    PIL (python image library)
+    mutagen.flac
+    mutagen.easyid3
+    mutagen.id3
+    mutagen.mp3
+    gobject
+    gst
+    pygtk (graphical mode only)
+    gtk (graphical mode only)
+    pango (graphical mode only)
+
+Other Requirements
+------------------
+
+    gstreamer
+    gstreamer-plugins (for the audio files you wish to play)
+
 General usage
 -------------
 
