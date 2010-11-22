@@ -319,6 +319,8 @@ class PlayList(object):
  
     def add_random_song(self):
         song_id = self.random.random()
+        if song_id == None:
+            raise Exception('No songs can be found')
         self.add_item([song_id], None, False)
 
 
@@ -582,8 +584,6 @@ class RandomSong(object):
             song = self.get_song(self.full_random)
             if song:
                 return song
-
-        # TODO every thing is bad need to kill the whole jukebox
 
 
     def get_song(self, function, lengths = False):
