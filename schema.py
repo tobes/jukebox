@@ -144,7 +144,7 @@ class Scan(Base):
     def __repr__(self):
        return "<Scan %s %s>" % (self.scan, self.success)
 
-engine = sa.create_engine('sqlite:///jukebox.sqlite')
+engine = sa.create_engine('sqlite:///database.sqlite')
 Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind = engine, autocommit = True)
