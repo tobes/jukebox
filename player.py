@@ -21,6 +21,10 @@ class Player(object):
         self.volume = 100
         self.muted = False
 
+        self.bonus_track = False
+        self.limit_songs_mode = True
+        self.limit_songs_number = 3
+
         self.active_player = pipe.Pipe('1')
         self.waiting_player = pipe.Pipe('2')
 
@@ -144,11 +148,16 @@ class Player(object):
                    position = self.get_position())
         return out
 
-
-
     def add_song(self, song_id, position = None):
+        # check we are allowed to add a new song to the playlist
+        if self.limit_songs_mode and self.playlist.length() >= self.limit_songs_number and not self.bonus_track:
+            return
+        self.bonus_track = False
         self.playlist.add_item([song_id], position)
 
+    def trim_playlist(self):
+        # trim the playlist to the number of songs allowed
+        self.playlist.trim_playlist(self.limit_songs_number)
 
     def add_album(self, album_id):
         data = self._database.get_tracks(album_id = album_id, order = 'track')
@@ -329,7 +338,7 @@ class PlayList(object):
         i = 0
         for item in self.items:
             if item.song_id == song_id:
-                return i
+                return iplaylist_update
             i += 1
         # item not found
         return None
@@ -371,6 +380,11 @@ class PlayList(object):
         self.playlist_update()
         return song
 
+
+    def trim_playlist(self, length):
+        # trim the playlist to the number of songs allowed
+        self.items = self.items[:length]
+        self.playlist_update()
 
     def playlist_update(self):
         if self.triggers:

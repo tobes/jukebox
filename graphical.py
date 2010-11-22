@@ -23,10 +23,6 @@ class Jukebox:
     msg_window_active = False
     admin_mode = True
     admin_password = "fish"
-    bonus_track = False
-    limit_songs_mode = True
-    limit_songs_number = 3
-    
 
     currentOffset = 0
     currentWhere = ""
@@ -805,11 +801,10 @@ class Jukebox:
                     elif key == '/':
                         self.msgWindow("Admin mode")
                     elif key == 'b':
-                        self.bonus_track = True
+                        self.player.bonus_track = True
                         self.msgWindow("Bonus track")
                     elif key == 's':
                         self.player.play_next()
-                     #   self.msgWindow("Skip")
                     elif key == 'f':                
                         self.fullscreen_mode = not self.fullscreen_mode
                         if self.fullscreen_mode:
@@ -817,25 +812,25 @@ class Jukebox:
                         else:
                             self.window.unfullscreen()
                     elif key == 'l':                
-                        self.limit_songs_mode = not self.limit_songs_mode
-                        if self.limit_songs_mode:
-                            self.msgWindow("limit of %s songs on" % self.limit_songs_number)
+                        self.player.limit_songs_mode = not self.player.limit_songs_mode
+                        if self.player.limit_songs_mode:
+                            self.msgWindow("limit of %s songs on" % self.player.limit_songs_number)
                         else:
                             self.msgWindow("limit off")
                     elif key == 'c':                
-                        if self.limit_songs_mode:
-                            self.playlistArray = self.playlistArray[:self.limit_songs_number + 1]
-                            self.refreshPlaylist()
+                        if self.player.limit_songs_mode:
+                            self.player.trim_playlist()
+                            self.msgWindow("trim playlist")
                     elif key == 'n':
                         try:
                             value = int(self.keylogger[-2:])
-                            self.limit_songs_number = value
-                            self.msgWindow("new limit of %s songs" % self.limit_songs_number)
+                            self.player.limit_songs_number = value
+                            self.msgWindow("new limit of %s songs" % self.player.limit_songs_number)
                         except:
                             try:
                                 value = int(self.keylogger[-1:])
-                                self.limit_songs_number = value
-                                self.msgWindow("new limit of %s songs" % self.limit_songs_number)
+                                self.player.limit_songs_number = value
+                                self.msgWindow("new limit of %s songs" % self.player.limit_songs_number)
                             except:
                                 pass
 
