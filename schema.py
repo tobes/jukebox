@@ -21,7 +21,7 @@ class Song(Base):
     track = sa.Column(sa.Integer)
     length = sa.Column(sa.Integer)
     unknown = sa.Column(sa.Boolean)
-    mimetype = sa.Column(sa.Unicode(assert_unicode = False))
+    mimetype = sa.Column(sa.Text)
     album_id = sa.Column(sa.Integer, sa.ForeignKey('album.id'))
     artist_id = sa.Column(sa.Integer, sa.ForeignKey('artist.id'))
     pattern = sa.Column(sa.Text)
