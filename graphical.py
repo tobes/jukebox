@@ -62,8 +62,6 @@ class jukebox:
                 colour="red"
         return gtk.gdk.color_parse(colour)
 
-    def update(self, value = 0.0): #FIXME
-        pass
 
     def delete_event(self, widget, event, data = None):
         self.player.stop_threads()
@@ -225,16 +223,10 @@ class jukebox:
         self.artistList.clear()
         data = self.database.get_artists(tracks = songs)
 
-        i = 0
-        total_i = len(data)
         # output
         for artist, count in data:
             info = '%s (%s)' % (artist.name, count)
             self.artistList.append([info, artist.id])
-
-            i += 1
-            if i % 10 == 0:
-                self.update(float(i) / total_i)
 
     # PLAYLIST
     # ======================================
@@ -627,9 +619,7 @@ class jukebox:
         self.trackHolder.pack_start(label, expand = True)
 
         self.trackScroller.add_with_viewport(self.trackHolder)
-        self.update(0.5)
         self.trackHolder.show_all()
-        self.update(1.0)
         #resize
         if self.pane2.get_position() <= 200:
             if self.pane2.get_position() < (i*21)+4:
