@@ -86,3 +86,31 @@ Text Mode
 
     Albums panel
     Return - add whole album
+
+
+Graphical Mode
+--------------
+
+    In graphical mode most actions can be carried out with the mouse.
+
+    left arrow - move backwards through albums
+    right arrow - move forwards through albums
+
+    Admin Mode
+    ----------
+
+    To enter admin mode you need to press and hold the Control Key
+    whilst typing the password - default password fish
+
+    Keys
+
+    Control q - quit admin mode
+    Control / - show if in admin mode
+    Control b - bonus track can add even if the playlist is full
+    Control s - skip track
+    Control f - toggle full screen
+    Control l - toggle playlist limit
+    Control c - clear any songs past length of currently allowed playlist
+    control n - before pressing type a number between 1 and 99 (holding control)
+                to set this as the new playlist length
+    control d - delete item from playlist give number first as for option n
