@@ -1167,11 +1167,7 @@ class jukebox:
         # start monitoring thread
         self.play_thread_id = thread.start_new_thread(self.status, ())
 
-        
-               
-               
-if __name__ == "__main__":
-
+def start():
     gobject.threads_init()
     statusPlaying = 0
     statusPlayListLen = 0
@@ -1181,3 +1177,6 @@ if __name__ == "__main__":
     currentFunction = ""
     app = jukebox()
     gtk.main()
+
+if __name__ == "__main__":
+    start()
