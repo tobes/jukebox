@@ -295,8 +295,6 @@ def check_albums():
     session.close()
 
 
-#check_albums()
-find_songs('/stuff2/archive/music/Albums/')
 
 
 
