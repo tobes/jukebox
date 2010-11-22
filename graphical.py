@@ -615,7 +615,7 @@ class jukebox:
 
         self.trackHolder.pack_start(self.trackTable, expand = False)
         label = gtk.Label()
-        label.set_size_request(-1, 0)
+        label.set_size_request(0, 0)
         self.trackHolder.pack_start(label, expand = True)
 
         self.trackScroller.add_with_viewport(self.trackHolder)
