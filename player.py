@@ -348,6 +348,15 @@ class PlayList(object):
         except IndexError:
             pass
 
+    def move_item_up(self, index):
+        if index > 0:
+            song_id = self.items[index].song_id
+            self.add_item([song_id], index - 1, False)
+
+    def move_item_down(self, index):
+        song_id = self.items[index].song_id
+        self.add_item([song_id], index + 2, False)
+
     def check_playlist(self):
         # if playlist is empty add a song
         while(len(self.items) < 1):

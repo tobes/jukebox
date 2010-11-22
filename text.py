@@ -409,6 +409,10 @@ class Albums(Listing):
 
     def custom_key(self, key):
         update = False
+        # ENTER add song
+        if key == 10:
+            if self.id != None:
+                self.player.add_album(self.id)
         if key < 256:
             key = chr(key).upper()
             if key >= 'A' and key <= 'Z':
@@ -462,6 +466,12 @@ class Playlist(Listing):
             key = chr(key).upper()
             if key == 'D':
                 self.player.playlist.delete_item_by_position(self.line)
+        elif key == 337:
+                self.player.playlist.move_item_up(self.line)
+                self.line -= 1
+        elif key == 336:
+                self.player.playlist.move_item_down(self.line)
+                self.line += 1
 
 
     def display_data(self):
