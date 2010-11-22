@@ -11,8 +11,7 @@ def clear_database():
         os.makedirs('art')
         # copy blank cd cover
         shutil.copyfile('0.jpg', 'art/0.jpg')
-    except Exception, e:
-        raise e
+    except:
         pass
 
 if __name__ == '__main__':
