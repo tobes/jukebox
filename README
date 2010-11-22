@@ -1,0 +1,57 @@
+Toby's Jukebox
+==============
+
+(c) 2010 Toby Dacre
+toby.junk@gmail.com
+GPL2
+Python 2.x
+
+About
+-----
+
+This is my personal jukebox program
+
+The aim of this project is to simply manage a music library
+that is arranged into directories that fit the general pattern
+of ARTIST_NAME/ALBUM_NAME/album_files. The album files should
+be of some variation of "TRACK_NUMBER TITLE.ext' . If a image
+file is found in the directory it will be used as album art.
+For albums with various artists they are expected to be in
+Various/ALBUM_NAME/album_files where the tracks are named
+'TRACK_NUMBER ARTIST_NAME TITLE.ext'.
+
+The jukebox can run in both a graphicl or text based mode.
+The graphical mode version also contains a 'child lock' mode
+which needs to be documented. It picks random songs if the
+playlist is empty.
+
+General usage
+-------------
+
+    python jukebox.py --find DIRECTORY  # find files in the given directory
+    python jukebox.py --text  # run in text mode
+    python jukebox.py --graphical  # run in graphical mode
+    python jukebox.py --clear  # clear database
+
+Text Mode
+---------
+
+    Keys
+
+    Tab - change selected panel
+    1 - select playlist panel
+    2 - select artists panel
+    3 - select albums panel
+    4 - select songs panel
+    > - skip current song
+    + - volume up
+    - - volume down
+    0 - toggle mute
+
+    Playlist panel
+    d - delete track from playlist
+
+    Artist / Albums / Songs panels
+    a-z - move to items starting with that letter
+    # - move to items starting with a number or special character
+    / - enter leave search mode
