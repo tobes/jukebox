@@ -1,4 +1,4 @@
-
+import os
 import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker, relation
 from sqlalchemy.ext.declarative import declarative_base
@@ -144,7 +144,8 @@ class Scan(Base):
     def __repr__(self):
        return "<Scan %s %s>" % (self.scan, self.success)
 
-engine = sa.create_engine('sqlite:///database.sqlite')
+app_path = os.path.dirname(os.path.abspath(__file__))
+engine = sa.create_engine('sqlite:///%s' % os.path.join(app_path, 'database.sqlite'))
 Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind = engine, autocommit = True)
