@@ -1114,9 +1114,6 @@ class jukebox:
         self.searchbox = gtk.Entry()
         self.searchbox.connect("changed", self.searchPress)
         self.mainStatus.pack_start(self.searchbox, expand = False, padding = 6)
-        self.updateProgress = gtk.ProgressBar()
-        self.updateProgress.set_size_request(150, 3)
-        self.mainStatus.pack_start(self.updateProgress, expand = False, padding = 6)
 
         self.mainSuperHolder.pack_start(self.mainStatus, expand = False)
 
