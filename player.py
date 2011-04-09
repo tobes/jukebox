@@ -296,7 +296,6 @@ class PlayList(object):
         return len(self.items)
 
     def add_item(self, song_list, position = None, user_selected = True):
-
         # adds songs to playlist at position
         # songs removed if already in playlist
         update = False
@@ -338,7 +337,7 @@ class PlayList(object):
         i = 0
         for item in self.items:
             if item.song_id == song_id:
-                return iplaylist_update
+                return i
             i += 1
         # item not found
         return None
