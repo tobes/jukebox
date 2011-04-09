@@ -18,7 +18,8 @@ class ClientState(object):
     # FIXME need to have multiple client states
     # at some time.
 
-    def __init__(self):
+    def __init__(self, uuid):
+        self.uuid = uuid
         self.trigger_song_change = False 
         self.trigger_playlist_change = False 
 
@@ -40,12 +41,11 @@ class Server(object):
 
         """ The thread that handles the interactions with the player. """
 
-        def __init__(self, client_socket=None, address=None, client_state=None, server=None):
+        def __init__(self, client_socket=None, address=None, server=None):
             threading.Thread.__init__(self)
-            self.client_state = client_state
+            self.server = server
             self.address = address
             self.socket = my_socket.MySocket(my_socket=client_socket)
-            self.server = server
 
         def run(self):
             s = self.socket
@@ -61,30 +61,44 @@ class Server(object):
                 data = json.loads(data)
                 logging.debug('process data\n%s' % data)
                 command = data.get('command')
+                uuid = data.get('uuid')
+                if uuid in self.server.client_states:
+                    client_state = self.server.client_states[uuid]
+                else:
+                    client_state = ClientState(uuid)
+                    self.server.client_states[uuid] = client_state
+                    self.server.my_player.register_client_state(client_state)
+
                 if command == 'KILL':
-                    self.server.serving = False
+                    # remove client_state from server as this client has quit.
+                    del self.server.client_states[uuid]
+                    #self.my_player.unregister_client_state(client_state)
+                    # kill server if no clients
+                    if not self.server.client_states:
+                        self.server.serving = False
+                    # kill this thread
                     self.socket.socket_open = False
                     out = 'killed'
                 elif command == 'currently_playing':
-                    out = self.server.my_player.currently_playing(self.client_state)
+                    out = self.server.my_player.currently_playing(client_state)
                 else:
                     args = data.get('args')
                     fn = getattr(self.server.my_player, command)
                     out = fn(*args)
                 out = pickle.dumps(out)
                 self.socket.write(out)
+                self.socket.socket_open = False
             except:
                 logging.exception('Process Error\nRAW DATA:\n%s\nOUT:\n%s' % (data, out))
 
     def __init__(self):
-        self.client_state = ClientState()
+        self.client_states = {}
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind(('', my_socket.PORT))
 
         self.socket.listen(5)
         self.serving = True
         self.my_player = player.Player()
-        self.my_player.register_client_state(self.client_state)
 
         logging.info('Start serving on port %s' % my_socket.PORT)
         try:
@@ -92,7 +106,6 @@ class Server(object):
                 (client_socket, address) = self.socket.accept()
                 thread = self.ServerThread(client_socket=client_socket,
                                       address=address,
-                                      client_state=self.client_state,
                                       server=self)
                 thread.run()
         except KeyboardInterrupt:
