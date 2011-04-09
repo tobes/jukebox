@@ -12,6 +12,10 @@ import sqlalchemy.orm as orm
 import pipe
 from schema import Song, Album, Artist, History, Session
 import scan
+import logging
+
+LOG_FILENAME = 'jukebox.log'
+logging.basicConfig(filename=LOG_FILENAME,level=logging.INFO)
 
 class Player(object):
     
@@ -26,7 +30,7 @@ class Player(object):
         self.active_player = pipe.Pipe('1')
         self.waiting_player = pipe.Pipe('2')
 
-        self.client_states = []
+        self.client_states = {}
 
         self.playlist = PlayList(self)
         self._database = Database()
@@ -47,7 +51,8 @@ class Player(object):
         self.scan_thread.start()
 
     def register_client_state(self, client_state):
-        self.client_states.append(client_state)
+        logging.info('registering client %s' % client_state.uuid)
+        self.client_states[client_state.uuid] = client_state
 
     def stop_threads(self):
 
@@ -184,8 +189,8 @@ class Player(object):
         # triggers
         for trigger in self.trigger_song_change:
             trigger()
-        for client_state in self.client_states:
-            client_state.song_change()
+        for client_uuid in self.client_states:
+            self.client_states[client_uuid].song_change()
 
 ##    def deleteSomeFromPlaylist(self, arg):
 ##        if not re.match(r'^\d+$', arg):
@@ -405,8 +410,8 @@ class PlayList(object):
             for trigger in self.triggers:
                 trigger()
 
-        for client_state in self.player.client_states:
-            client_state.playlist_change()
+        for client_uuid in self.player.client_states:
+            self.player.client_states[client_uuid].playlist_change()
 
 
 class Cache(object):

@@ -3,6 +3,7 @@ import pickle
 import simplejson as json
 import logging
 from time import sleep
+import uuid
 
 import server
 
@@ -27,7 +28,8 @@ class MySocket(object):
             self.socket_open = True
         else:
             self.socket_type = 'CLIENT'
-            self.connect()
+            self.uuid = str(uuid.uuid4())
+            logging.info('New client socket %s', self.uuid)
 
     def connect(self):
         attempt = 0
@@ -37,7 +39,9 @@ class MySocket(object):
                 logging.info('Try Connection')
                 self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.socket.connect(('', PORT))
+                logging.info('Connected')
                 self.socket_open = True
+                break
             except socket.error, e:
                 if e.errno == 111:
                     # connection refused
@@ -57,7 +61,10 @@ class MySocket(object):
 
 
     def command(self, command_name, *args):
-        packet = dict(command=command_name, args=args)
+        self.connect()
+        packet = dict(command=command_name, uuid=self.uuid, args=args)
+        logging.debug(packet)
+
         packet = json.dumps(packet)
         self.write(packet)
         out = self.read()
