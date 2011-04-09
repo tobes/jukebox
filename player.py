@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import thread
 import time
 import random
@@ -28,7 +26,9 @@ class Player(object):
         self.active_player = pipe.Pipe('1')
         self.waiting_player = pipe.Pipe('2')
 
-        self.playlist = PlayList()
+        self.client_states = []
+
+        self.playlist = PlayList(self)
         self._database = Database()
 
         self.alive = True
@@ -46,6 +46,9 @@ class Player(object):
         self.status_thread.start()
         self.scan_thread.start()
 
+    def register_client_state(self, client_state):
+        self.client_states.append(client_state)
+
     def stop_threads(self):
 
         self.alive = False
@@ -58,6 +61,8 @@ class Player(object):
 
 
     def get_cache(self, control):
+        # FIXME simplify this or better document
+        # the control interface
         return Cache(control)
 
     def add_trigger_song_change(self, callback):
@@ -140,12 +145,18 @@ class Player(object):
         else:
             self.mute_off()
 
-    def currently_playing(self):
+    def currently_playing(self, client_state=None):
         """return data on currently playing song"""
 
         out = dict(item = self.current_song,
                    duration = self.get_duration(),
                    position = self.get_position())
+        if client_state:
+            out['trigger_song_change'] = client_state.trigger_song_change
+            out['trigger_playlist_change'] = client_state.trigger_playlist_change
+            client_state.trigger_song_change = False
+            client_state.trigger_playlist_change = False
+
         return out
 
     def add_song(self, song_id, position = None):
@@ -173,7 +184,8 @@ class Player(object):
         # triggers
         for trigger in self.trigger_song_change:
             trigger()
-
+        for client_state in self.client_states:
+            client_state.song_change()
 
 ##    def deleteSomeFromPlaylist(self, arg):
 ##        if not re.match(r'^\d+$', arg):
@@ -202,6 +214,8 @@ class Player(object):
         self.playlist.delete_item_by_position(index)
 
 
+    def playlist_items(self):
+        return self.playlist.items
 
 class ScanThread(Thread):
 
@@ -239,50 +253,51 @@ class StatusThread(Thread):
 
 
 
+class PlayListItem(object):
+    """Item in the playlist"""
+
+    def __init__(self, song_id, user_selected):
+
+        # get song info
+        session = Session()
+        session.begin()
+
+        song, artist, album = session.query(Song, Artist, Album).outerjoin(Song.song_artist).outerjoin(Song.song_album).filter(Song.id == song_id).one()
+
+        self.song_id = song.id
+        self.song_title = song.title
+        self.album_id = album.id
+        self.album_name = album.name
+        self.album_has_art = album.art
+        if artist:
+            self.artist_name = artist.name
+            self.artist_id = artist.id
+        else:
+            self.artist_name = 'unknown'
+            self.artist_id = 0
+        self.track = song.track
+        self.filename = song.path
+
+        # add history
+        obj = History(song_id, user_selected)
+        session.add(obj)
+        self.history_id = id
+        session.commit()
+        session.close()
+
+    def __repr__(self):
+        return '<%s ~ %s>' % (self.artist_name, self.song_title)
+
 
 class PlayList(object):
     """Manages the playlist allows adding, deleting of items
     including add random song"""
 
 
-    class PlayListItem(object):
-        """Item in the playlist"""
 
-        def __init__(self, song_id, user_selected):
+    def __init__(self, player):
 
-            # get song info
-            session = Session()
-            session.begin()
-
-            song, artist, album = session.query(Song, Artist, Album).outerjoin(Song.song_artist).outerjoin(Song.song_album).filter(Song.id == song_id).one()
-
-            self.song_id = song.id
-            self.song_title = song.title
-            self.album_id = album.id
-            self.album_name = album.name
-            self.album_has_art = album.art
-            if artist:
-                self.artist_name = artist.name
-                self.artist_id = artist.id
-            else:
-                self.artist_name = 'unknown'
-                self.artist_id = 0
-            self.track = song.track
-            self.filename = song.path
-
-            # add history
-            obj = History(song_id, user_selected)
-            session.add(obj)
-            self.history_id = id
-            session.commit()
-            session.close()
-
-        def __repr__(self):
-            return '<%s ~ %s>' % (self.artist_name, self.song_title)
-
-
-    def __init__(self):
-
+        self.player = player
         self.items = []
         self.triggers = []
         self.random = RandomSong()
@@ -315,7 +330,7 @@ class PlayList(object):
                 item = self.items.pop(index)
             else:
                 # create new item
-                item = self.PlayListItem(song_id, user_selected)
+                item = PlayListItem(song_id, user_selected)
     
             # add item
             self.items.insert(position, item)
@@ -390,6 +405,8 @@ class PlayList(object):
             for trigger in self.triggers:
                 trigger()
 
+        for client_state in self.player.client_states:
+            client_state.playlist_change()
 
 
 class Cache(object):

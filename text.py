@@ -3,7 +3,8 @@ import sys
 import curses
 import curses.textpad
 import gobject
-import player
+
+from client import Client as Player
 
 
 def pretty_time(seconds):
@@ -465,17 +466,17 @@ class Playlist(Listing):
         if key < 256:
             key = chr(key).upper()
             if key == 'D':
-                self.player.playlist.delete_item_by_position(self.line)
+                self.player.playlist_delete_item_by_position(self.line)
         elif key == 337:
-                self.player.playlist.move_item_up(self.line)
+                self.player.playlist_move_item_up(self.line)
                 self.line -= 1
         elif key == 336:
-                self.player.playlist.move_item_down(self.line)
+                self.player.playlist_move_item_down(self.line)
                 self.line += 1
 
 
     def display_data(self):
-        playlist = self.player.playlist.items
+        playlist = self.player.playlist_items()
 
         self.count = len(playlist)
         for item in playlist[self.offset:self.y - 2 + self.offset]:
@@ -497,7 +498,7 @@ class Interface(object):
         stdscr.nodelay(1)
         curses.curs_set(0)
         gobject.threads_init()
-        self.player = player.Player()
+        self.player = Player()
         #self.player.mute_toggle()
 
         # set up controls
@@ -512,7 +513,7 @@ class Interface(object):
         self.albums_control.attach(self.tracks_control)
 
         # get playlist to update on changes
-        self.player.playlist.add_trigger(self.playlist_control.show)
+        self.player.playlist_add_trigger(self.playlist_control.show)
         # update current trigger
         self.player.add_trigger_song_change(self.show_playing)
 
@@ -605,6 +606,7 @@ class Interface(object):
                 self.current.clrtoeol()
     
                 self.current.refresh()
+
         except AttributeError:
             pass
 
@@ -653,6 +655,12 @@ class Interface(object):
                 self.tabs[self.current_tab]['control'].search_input.show()
             else:
                 curses.curs_set(0)
+
+            # triggers
+            if current['trigger_song_change'] and self.player.trigger_song_change:
+                self.player.trigger_song_change()
+            if current['trigger_playlist_change'] and self.player.trigger_playlist_change:
+                self.player.trigger_playlist_change()
 
     def show_status(self):
 
@@ -760,7 +768,7 @@ class Interface(object):
                     curses.flushinp()
                     self.key_event(key)
                 else:
-                    time.sleep(0.1)
+                    time.sleep(0.2)
                 # debug info
           #      self.stdscr.addstr(46, 0, '%s    ' % key)
           #      self.stdscr.addstr(47, 0, '%s   %s ' % (self.current_tab, self.tabs[self.current_tab].color))
