@@ -59,10 +59,14 @@ class Client(object):
         return player.Cache(control)
 
     def add_trigger_song_change(self, trigger):
+        logging.debug('Add trigger song change')
+        logging.debug(trigger)
         self.trigger_song_change = trigger
         trigger()
 
     def playlist_add_trigger(self, trigger):
+        logging.debug('Add trigger playlist change')
+        logging.debug(trigger)
         self.trigger_playlist_change = trigger
         trigger()
 
