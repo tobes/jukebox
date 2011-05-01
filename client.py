@@ -26,6 +26,8 @@ class Client(object):
 
     def stop_threads(self):
         self.command('KILL')
+        # make second request to finish the servers waiting thread
+        self.command('KILL')
 
     def play_next(self):
         self.command('play_next')
