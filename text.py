@@ -180,7 +180,7 @@ class Listing(object):
         if self.line < self.min_line:
             self.line = self.min_line
         if self.line < self.offset:
-            self.offset = self.line 
+            self.offset = self.line
         elif self.line >= self.offset + self.y - 2:
             self.offset = self.line - self.y + 3
 
@@ -270,7 +270,7 @@ class Input(object):
         elif self.position < 0:
             self.position = 0
         return old_text != self.text
-            
+
     def show(self):
         win = self.win.derwin(1, self.length + 2, self.parent.y - 1, self.parent.x - self.length - 2)
         win.addstr(0, 0, '/' + self.text + ' ' * (self.length - len(self.text)))
@@ -291,7 +291,7 @@ class Artists(Listing):
 
 
     def custom_key(self, key):
-    
+
         update = False
         if key < 256:
             key = chr(key).upper()
@@ -396,7 +396,7 @@ class Tracks(Listing):
             else:
                 text = u'%ls' % (song.title)
 
-            
+
             if self.current_record():
                 self.id = song.id
             self.display_line(text)
@@ -586,7 +586,7 @@ class Interface(object):
         self.win_albums = curses.newwin(size_albums, self.x, start_albums, 0)
         self.win_tracks = curses.newwin(size_tracks, self.x, start_tracks, 0)
         self.win_status = curses.newwin(end + 1, self.x, self.y - 1, 0)
-        
+
         # show windows
         self.artists_control.refresh(self.win_artists)
         self.tracks_control.refresh(self.win_tracks)
@@ -612,7 +612,7 @@ class Interface(object):
                 text = u"%s. %s" % (track, title)
                 self.current.addstr(1, 0, text[:self.x].encode('utf-8'), curses.color_pair(2))
                 self.current.clrtoeol()
-    
+
                 self.current.refresh()
 
         except AttributeError:
@@ -644,7 +644,7 @@ class Interface(object):
                 bar_length = int(self.x * (float(position) / duration))
             else:
                 bar_length = 0
-            bar = pretty_time(position) #pretty_time(duration),
+            bar = pretty_time(position)
             # centre the time info
             if len(bar) < self.x:
                 bar = ' ' * int((self.x - len(bar)) / 2) + bar
@@ -674,7 +674,7 @@ class Interface(object):
     def show_status(self):
 
         speed = 0.3
-        
+
         if self.status_offset > 0:
             self.status_offset -= speed
             position = 0

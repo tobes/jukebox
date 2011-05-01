@@ -18,7 +18,7 @@ LOG_FILENAME = 'jukebox.log'
 logging.basicConfig(filename=LOG_FILENAME,level=logging.INFO)
 
 class Player(object):
-    
+
     def __init__(self):
         self.volume = 100
         self.muted = False
@@ -252,7 +252,7 @@ class StatusThread(Thread):
 
         while self.player.alive:
             # sleep first
-            time.sleep(1)    
+            time.sleep(1)
 
             if self.player.active_player.song_ending():
                 self.player.play_next()
@@ -325,7 +325,7 @@ class PlayList(object):
         # songs removed if already in playlist
         update = False
         for song_id in song_list:
-            index = self.find_song_in_list(song_id) 
+            index = self.find_song_in_list(song_id)
             if index != None and position == None:
                 # already in the playlist and not moving so ignore
                 continue
@@ -335,13 +335,13 @@ class PlayList(object):
                 # item already in playlist so just move it
                 if position >= index:
                     position = position - 1
-    
+
                 # get item from playlist
                 item = self.items.pop(index)
             else:
                 # create new item
                 item = PlayListItem(song_id, user_selected)
-    
+
             # add item
             self.items.insert(position, item)
             position += 1
@@ -351,7 +351,6 @@ class PlayList(object):
         logging.info('Added update=%s' % update)
 
 
- 
     def add_random_song(self):
         song_id = self.random.random()
         if song_id == None:
@@ -371,7 +370,7 @@ class PlayList(object):
 
     def delete_song(self, song_id):
         # remove song from play list if it exists
-        index = self.find_song_in_list(song_id) 
+        index = self.find_song_in_list(song_id)
         if index != None:
             item = self.items.pop(index)
         self.playlist_update()
@@ -416,7 +415,6 @@ class PlayList(object):
         if self.triggers:
             for trigger in self.triggers:
                 trigger()
-
         for client_uuid in self.player.client_states:
             self.player.client_states[client_uuid].playlist_change()
 
@@ -462,7 +460,7 @@ class Cache(object):
 
 
     def cache_query(self, call, **kw):
-        if kw != self.kw or call != self.last_call: 
+        if kw != self.kw or call != self.last_call:
             self.last_call = call
             self.kw = kw
             self.cache_clear()
@@ -497,8 +495,8 @@ class Cache(object):
     def get_albums_count(self, **kw):
         return self.database.get_albums(count = True, **kw)
 
-        
-    
+
+
 class Database(object):
 
     def __init__(self):
@@ -534,7 +532,7 @@ class Database(object):
     def get_tracks(self, **kw):
 
         data = self.session().query(Song, Album, Artist).join(Song.song_album).join(Song.song_artist)
-        
+
         order = kw.get('order')
         if order == 'track':
             data = data.order_by(Artist.name, Album.name, Song.track)

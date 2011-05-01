@@ -20,8 +20,8 @@ class ClientState(object):
 
     def __init__(self, uuid):
         self.uuid = uuid
-        self.trigger_song_change = False 
-        self.trigger_playlist_change = False 
+        self.trigger_song_change = False
+        self.trigger_playlist_change = False
 
     def song_change(self):
         self.trigger_song_change = True
@@ -118,7 +118,7 @@ class Server(object):
 
 def start_daemon():
     """ Helper function to start a Server in a thread """
-     
+
     class DaemonThread(threading.Thread):
         def run(self):
             server = Server()

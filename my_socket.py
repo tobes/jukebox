@@ -16,7 +16,7 @@ HEADER_LENGTH = 5
 
 
 
-    
+
 class MySocket(object):
 
     def __init__(self, my_socket=None):
@@ -95,7 +95,7 @@ class MySocket(object):
             if len(data) == num_bytes:
                 return data
         self.socket_open = False
-                
+
     def write(self, data):
         num_bytes = len(data)
         packet = '%s' % num_bytes
