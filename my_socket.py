@@ -26,20 +26,21 @@ class MySocket(object):
             self.socket = my_socket
             self.socket_type = 'SERVER'
             self.socket_open = True
+            logging.debug('New server socket')
         else:
             self.socket_type = 'CLIENT'
             self.uuid = str(uuid.uuid4())
-            logging.info('New client socket %s', self.uuid)
+            logging.debug('New client socket %s', self.uuid)
 
     def connect(self):
         attempt = 0
         while attempt < 5:
             attempt += 1
             try:
-                logging.info('Try Connection')
+                logging.debug('Try Connection')
                 self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.socket.connect(('', PORT))
-                logging.info('Connected')
+                logging.debug('Connected')
                 self.socket_open = True
                 break
             except socket.error, e:

@@ -5,7 +5,10 @@ import curses.textpad
 import gobject
 
 from client import Client as Player
+import logging
 
+LOG_FILENAME = 'jukebox.log'
+logging.basicConfig(filename=LOG_FILENAME,level=logging.INFO)
 
 def pretty_time(seconds):
 
@@ -165,7 +168,8 @@ class Listing(object):
 
     def display(self):
 
-
+        logging.info('DISPLAY')
+        logging.info(self)
         # no movement do nothing
         if self.line == self.line_last:
             return
@@ -477,6 +481,9 @@ class Playlist(Listing):
 
     def display_data(self):
         playlist = self.player.playlist_items()
+        logging.info('playlist')
+        logging.info('playlist**')
+        logging.info(playlist)
 
         self.count = len(playlist)
         for item in playlist[self.offset:self.y - 2 + self.offset]:

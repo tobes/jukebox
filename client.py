@@ -1,6 +1,10 @@
 
 import player
 import my_socket
+import logging
+LOG_FILENAME = 'jukebox.log'
+logging.basicConfig(filename=LOG_FILENAME,level=logging.INFO)
+
 
 class Client(object):
 
@@ -14,6 +18,7 @@ class Client(object):
         self.command('add_album', album_id)
 
     def add_song(self, song_id):
+        logging.info('add_song %s' % song_id)
         self.command('add_song', song_id)
 
     def get_mute(self):

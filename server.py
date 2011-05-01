@@ -75,6 +75,7 @@ class Server(object):
                     #self.my_player.unregister_client_state(client_state)
                     # kill server if no clients
                     if not self.server.client_states:
+                        logging.debug('killing server')
                         self.server.serving = False
                     # kill this thread
                     self.socket.socket_open = False

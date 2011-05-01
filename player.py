@@ -169,6 +169,7 @@ class Player(object):
         if self.limit_songs_mode and self.playlist.length() >= self.limit_songs_number and not self.bonus_track:
             return
         self.bonus_track = False
+        logging.info('Add %s' % song_id)
         self.playlist.add_item([song_id], position)
 
     def trim_playlist(self):
@@ -343,6 +344,8 @@ class PlayList(object):
             update = True
         if update:
             self.playlist_update()
+        logging.info('Added update=%s' % update)
+
 
  
     def add_random_song(self):
