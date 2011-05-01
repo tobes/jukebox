@@ -86,7 +86,7 @@ class Server(object):
                     args = data.get('args')
                     fn = getattr(self.server.my_player, command)
                     out = fn(*args)
-                out = pickle.dumps(out)
+                out = pickle.dumps([client_state, out])
                 self.socket.write(out)
                 self.socket.socket_open = False
             except:

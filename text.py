@@ -480,8 +480,8 @@ class Playlist(Listing):
 
 
     def display_data(self):
-        playlist = self.player.playlist_items()
         logging.info('playlist')
+        playlist = self.player.playlist_items()[1]
         logging.info('playlist**')
         logging.info(playlist)
 
@@ -598,12 +598,13 @@ class Interface(object):
         try:
             current = self.player.currently_playing()
             if current:
-                item = current['item']
-                title = item.song_title
-                artist = item.artist_name
-                track = item.track
-                album = item.album_name
-    
+                current = current[1]
+
+                artist = current['artist']
+                title = current['title']
+                track = current['track']
+                album = current['album']
+
                 # display track info
                 text = u"%s ~ %s" % (artist, album)
                 self.current.addstr(0, 0, text[:self.x].encode('utf-8'), curses.color_pair(2))
@@ -621,6 +622,7 @@ class Interface(object):
     def show_current(self):
         current = self.player.currently_playing()
         if current:
+            current = current[1]
             duration = current['duration']
             position = current['position']
 
@@ -630,10 +632,10 @@ class Interface(object):
             self.current.clrtoeol()
 
             #volume
-            if self.player.get_mute():
+            if self.player.get_mute()[1]:
                 volume = 'MUTE'
             else:
-                volume = '%s%%' % self.player.get_volume()
+                volume = '%s%%' % self.player.get_volume()[1]
             self.current.addstr(2, self.x - len(volume), volume, curses.color_pair(2))
 
 

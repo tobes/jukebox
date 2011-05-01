@@ -155,7 +155,11 @@ class Player(object):
 
         out = dict(item = self.current_song,
                    duration = self.get_duration(),
-                   position = self.get_position())
+                   position = self.get_position(),
+                   title = self.current_song.song_title,
+                   artist = self.current_song.artist_name,
+                   track = self.current_song.track,
+                   album = self.current_song.album_name)
         if client_state:
             out['trigger_song_change'] = client_state.trigger_song_change
             out['trigger_playlist_change'] = client_state.trigger_playlist_change

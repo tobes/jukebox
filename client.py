@@ -14,6 +14,17 @@ class Client(object):
         self.trigger_song_change = None
         self.trigger_playlist_change = None
 
+    def command(self, command, *args):
+        result = self.socket.command(command, *args)
+        state = out[0]
+        if state.trigger_song_change:
+            self.trigger_song_change()
+        if state.trigger_playlist_change:
+            self.trigger_playlist_change()
+        return out[2]
+
+
+
     def add_album(self, album_id):
         self.command('add_album', album_id)
 
@@ -56,8 +67,7 @@ class Client(object):
         trigger()
 
     def playlist_items(self):
-        self.command('playlist_items')
-        return []
+        return self.command('playlist_items')
 
     def playlist_delete_item_by_position(self, position):
         pass
