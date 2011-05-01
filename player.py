@@ -291,7 +291,7 @@ class PlayListItem(object):
         # add history
         obj = History(song_id, user_selected)
         session.add(obj)
-        self.history_id = id
+        self.history_id = obj.id
         session.commit()
         session.close()
 
